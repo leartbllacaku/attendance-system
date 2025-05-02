@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance Logs</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background-color: #d4edda; color: #155724; }
+        .warning { background-color: #fff3cd; color: #856404; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+
+<body>
+
+    <h1>Attendance Logs</h1>
+    
+    <!-- Display flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="message {{ category }}">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    
+    <!-- Class filter -->
+    <form method="GET">
+        <label for="class_filter">Filter by Class:</label>
+        <select name="class_name" id="class_filter" onchange="this.form.submit()">
+            <option value="">All Classes</option>
+            {% for code, name in classes %}
+            <option value="{{ code }}" {% if selected_class == code %}selected{% endif %}>
+                {{ code }} - {{ name }}
+            </option>
+            {% endfor %}
+        </select>
+    </form>
+    
+    <table>
+        <tr>
+            <th>Student Name</th>
+            <th>Class</th>
+            <th>Date</th>
+            <th>Time</th>
+        </tr>
+        {% for row in attendance %}
+        <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+    <br>
+    <a href="/">Back to Upload</a>
+</body>
+
+</html>
